@@ -15,8 +15,9 @@ function Products({ search, selectedCategory }) {
   }, []);
 
   const filteredProducts = products.filter((product) => {
-    const matchesSearch =
-      product.name.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = product.name
+      .toLowerCase()
+      .includes(search.toLowerCase());
 
     const matchesCategory =
       selectedCategory === "All" ||
@@ -26,25 +27,32 @@ function Products({ search, selectedCategory }) {
   });
 
   return (
-    <section className="px-10 py-16">
-      <h2 className="text-4xl font-bold text-center mb-10">
+    <section className="px-4 sm:px-6 lg:px-10 py-12 sm:py-16">
+
+      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center text-[#5D001E] mb-10">
         Featured Sarees
       </h2>
 
-      <div className="grid md:grid-cols-3 gap-8">
-        {filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => (
+      {filteredProducts.length > 0 ? (
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+
+          {filteredProducts.map((product) => (
             <ProductCard
               key={product._id}
               product={product}
             />
-          ))
-        ) : (
-          <div className="col-span-3 text-center text-2xl font-semibold text-gray-500">
-            No products found.
-          </div>
-        )}
-      </div>
+          ))}
+
+        </div>
+
+      ) : (
+
+        <div className="text-center text-xl sm:text-2xl font-semibold text-gray-500">
+          No products found.
+        </div>
+
+      )}
     </section>
   );
 }

@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
+import api from "../services/api";
 
 function Checkout() {
   const { cart, clearCart } = useContext(CartContext);
@@ -52,24 +52,19 @@ function Checkout() {
         total,
       };
 
-      // Save order in MongoDB
-      await axios.post(
-        "http://127.0.0.1:8000/place-order",
-        order
-      );
+      await api.post("/place-order", order);
 
-      // ---------- WhatsApp Message ----------
-      const phoneNumber = "919398383655"; // Replace with your WhatsApp number
+      const phoneNumber = "919398383655";
 
       let message = `🛍️ *New Order - Chandi Clothing*
 
-👤 *Customer Details*
+👤 Customer Details
 
 Name : ${customer.name}
 Phone : ${customer.mobile}
 Email : ${customer.email}
 
-📍 Address :
+📍 Address
 ${customer.address}
 ${customer.city}
 ${customer.state}
@@ -77,7 +72,7 @@ ${customer.pincode}
 
 ━━━━━━━━━━━━━━
 
-🛒 *Products Ordered*
+🛒 Products Ordered
 
 `;
 
@@ -95,20 +90,18 @@ Subtotal : ₹${Number(item.price) * item.quantity}
 
       message += `━━━━━━━━━━━━━━
 
-💰 *Grand Total : ₹${total}*
+💰 Grand Total : ₹${total}
 
-Thank you ❤️`;
+Thank You ❤️`;
 
       clearCart();
 
       window.open(
-        `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-          message
-        )}`,
+        `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
         "_blank"
       );
 
-      alert("Order placed successfully!");
+      alert("Order Placed Successfully");
 
     } catch (error) {
       console.log(error);
@@ -117,117 +110,138 @@ Thank you ❤️`;
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-10">
+    <div className="min-h-screen bg-gray-100 px-4 sm:px-8 lg:px-10 py-10">
 
-      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8">
 
         {/* Customer Details */}
 
-        <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8">
 
-          <h1 className="text-4xl font-bold text-[#5D001E] mb-6">
+          <h1 className="text-3xl sm:text-4xl font-bold text-[#5D001E] mb-8">
             Checkout
           </h1>
 
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            onChange={handleChange}
-            className="w-full border p-3 rounded mb-4"
-          />
+          <div className="space-y-4">
 
-          <input
-            type="text"
-            name="mobile"
-            placeholder="Mobile Number"
-            onChange={handleChange}
-            className="w-full border p-3 rounded mb-4"
-          />
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              onChange={handleChange}
+              className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:border-[#5D001E] focus:outline-none"
+            />
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            onChange={handleChange}
-            className="w-full border p-3 rounded mb-4"
-          />
+            <input
+              type="text"
+              name="mobile"
+              placeholder="Mobile Number"
+              onChange={handleChange}
+              className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:border-[#5D001E] focus:outline-none"
+            />
 
-          <input
-            type="text"
-            name="address"
-            placeholder="Address"
-            onChange={handleChange}
-            className="w-full border p-3 rounded mb-4"
-          />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              onChange={handleChange}
+              className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:border-[#5D001E] focus:outline-none"
+            />
 
-          <input
-            type="text"
-            name="city"
-            placeholder="City"
-            onChange={handleChange}
-            className="w-full border p-3 rounded mb-4"
-          />
+            <textarea
+              rows="3"
+              name="address"
+              placeholder="Address"
+              onChange={handleChange}
+              className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:border-[#5D001E] focus:outline-none"
+            />
 
-          <input
-            type="text"
-            name="state"
-            placeholder="State"
-            onChange={handleChange}
-            className="w-full border p-3 rounded mb-4"
-          />
+            <input
+              type="text"
+              name="city"
+              placeholder="City"
+              onChange={handleChange}
+              className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:border-[#5D001E] focus:outline-none"
+            />
 
-          <input
-            type="text"
-            name="pincode"
-            placeholder="Pincode"
-            onChange={handleChange}
-            className="w-full border p-3 rounded mb-6"
-          />
+            <input
+              type="text"
+              name="state"
+              placeholder="State"
+              onChange={handleChange}
+              className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:border-[#5D001E] focus:outline-none"
+            />
 
-          <button
-            onClick={placeOrder}
-            className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-lg text-lg font-semibold"
-          >
-            💬 Place Order on WhatsApp
-          </button>
+            <input
+              type="text"
+              name="pincode"
+              placeholder="Pincode"
+              onChange={handleChange}
+              className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:border-[#5D001E] focus:outline-none"
+            />
+
+            <button
+              onClick={placeOrder}
+              className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl text-lg font-semibold transition"
+            >
+              💬 Place Order on WhatsApp
+            </button>
+
+          </div>
 
         </div>
 
         {/* Order Summary */}
 
-        <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8">
 
-          <h2 className="text-3xl font-bold text-[#5D001E] mb-6">
+          <h2 className="text-3xl font-bold text-[#5D001E] mb-8">
             Order Summary
           </h2>
 
-          {cart.map((item) => (
-            <div
-              key={item._id}
-              className="flex justify-between border-b pb-4 mb-4"
-            >
-              <div>
-                <h3 className="font-semibold text-lg">
-                  {item.name}
-                </h3>
+          {cart.length === 0 ? (
+            <p className="text-center text-gray-500">
+              No Products Added.
+            </p>
+          ) : (
+            <>
+              {cart.map((item) => (
+                <div
+                  key={item._id}
+                  className="flex justify-between items-center border-b py-4"
+                >
+                  <div>
 
-                <p>
-                  ₹{item.price} × {item.quantity}
-                </p>
+                    <h3 className="font-bold text-lg">
+                      {item.name}
+                    </h3>
+
+                    <p className="text-gray-600">
+                      ₹{item.price} × {item.quantity}
+                    </p>
+
+                  </div>
+
+                  <h3 className="font-bold text-[#5D001E]">
+                    ₹{Number(item.price) * item.quantity}
+                  </h3>
+
+                </div>
+              ))}
+
+              <div className="mt-8 flex justify-between items-center">
+
+                <h2 className="text-2xl font-bold">
+                  Grand Total
+                </h2>
+
+                <h2 className="text-3xl font-bold text-pink-600">
+                  ₹{total}
+                </h2>
+
               </div>
-
-              <h3 className="font-bold text-[#5D001E]">
-                ₹{Number(item.price) * item.quantity}
-              </h3>
-            </div>
-          ))}
-
-          <hr className="my-4" />
-
-          <h2 className="text-3xl font-bold text-pink-600">
-            Total : ₹{total}
-          </h2>
+            </>
+          )}
 
         </div>
 
