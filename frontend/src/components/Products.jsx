@@ -1,13 +1,13 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import api from "../services/api";
 import ProductCard from "./ProductCard";
 
 function Products({ search, selectedCategory }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/products")
+    api
+      .get("/products")
       .then((response) => {
         setProducts(response.data);
       })
