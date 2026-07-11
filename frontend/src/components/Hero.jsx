@@ -47,9 +47,16 @@ function Hero() {
                   {slide.subtitle}
                 </p>
 
-                <button className="mt-8 bg-yellow-500 text-black px-8 py-3 rounded-lg font-semibold hover:bg-yellow-400">
-                  Shop Now
-                </button>
+                <button
+                  onClick={() =>
+                  document
+                    .getElementById("products")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                  }
+                  className="mt-8 bg-yellow-500 text-black px-8 py-3 rounded-lg font-semibold hover:bg-yellow-400 transition"
+                  >
+                    Shop Now
+                  </button>
               </div>
 
               <div className="md:w-1/2 flex justify-center mt-10 md:mt-0">
